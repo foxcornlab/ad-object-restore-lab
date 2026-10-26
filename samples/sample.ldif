@@ -1,0 +1,52 @@
+# SYNTHETIC sample only. No real domain data, no real SIDs/GUIDs.
+# Domain: example.com. Run: python3 ../ad_object_restore_lab.py --input sample.ldif
+# Expected: 1 restorable deleted user, 1 recycled object,
+# 1 CRITICAL bidirectional dMSA, 1 HIGH one-sided dMSA, 1 clean dMSA, 1 clean user.
+
+dn: CN=olduser\0ADEL:11111111-2222-3333-4444-555555555555,CN=Deleted Objects,DC=example,DC=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+isDeleted: TRUE
+lastKnownParent: OU=Users,DC=example,DC=com
+whenChanged: 20260824090000.0Z
+
+dn: CN=oldcomputer\0ADEL:66666666-7777-8888-9999-000000000000,CN=Deleted Objects,DC=example,DC=com
+objectClass: top
+objectClass: computer
+isDeleted: TRUE
+isRecycled: TRUE
+lastKnownParent: OU=Workstations,DC=example,DC=com
+whenChanged: 20260101090000.0Z
+
+dn: CN=Domain Admins,CN=Users,DC=example,DC=com
+objectClass: top
+objectClass: group
+objectSid: S-1-5-21-100-200-300-512
+msDS-ManagedAccountSucceededByLink: CN=svc-bad,OU=ServiceAccounts,DC=example,DC=com
+
+dn: CN=svc-bad,OU=ServiceAccounts,DC=example,DC=com
+objectClass: top
+objectClass: msDS-DelegatedManagedServiceAccount
+msDS-DelegatedMSAState: 2
+msDS-ManagedAccountPrecededByLink: CN=Domain Admins,CN=Users,DC=example,DC=com
+
+dn: CN=svc-one-sided,OU=ServiceAccounts,DC=example,DC=com
+objectClass: top
+objectClass: msDS-DelegatedManagedServiceAccount
+msDS-DelegatedMSAState: 2
+msDS-ManagedAccountPrecededByLink: CN=Domain Admins,CN=Users,DC=example,DC=com
+
+dn: CN=svc-clean,OU=ServiceAccounts,DC=example,DC=com
+objectClass: top
+objectClass: msDS-DelegatedManagedServiceAccount
+msDS-DelegatedMSAState: 0
+
+dn: CN=normaluser,OU=Users,DC=example,DC=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+sAMAccountName: normaluser
+objectSid: S-1-5-21-100-200-300-1101
